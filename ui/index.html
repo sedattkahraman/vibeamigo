@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="va-token" content="__VA_TOKEN__">
+<title>VibeAmigo</title>
+<style>
+:root{
+  --bg:#f6f5f1; --card:#ffffff; --ink:#18181b; --muted:#5f5f66; --line:#e4e2dc; --soft:#f3f2ee;
+  --ok:#1f7a4d; --ok-bg:#e3f3ea; --bad:#b4271f; --bad-bg:#fbe5e2; --warn:#9a6200; --warn-bg:#fdf0d5;
+  --unk:#3f5fa8; --unk-bg:#e6ecf8; --accent:#18181b; --accent-ink:#fff;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#121214; --card:#1b1b1f; --ink:#f1f0ec; --muted:#a3a2a8; --line:#2c2c31; --soft:#222227;
+    --ok:#5fd39a; --ok-bg:#163a28; --bad:#ff8a7e; --bad-bg:#43191a; --warn:#f2c160; --warn-bg:#3d2f10;
+    --unk:#9db6ff; --unk-bg:#1d2a47; --accent:#f1f0ec; --accent-ink:#121214; }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+.logo{font-weight:800;font-size:20px;letter-spacing:-.02em}
+.logo span{display:block;color:var(--muted);font-weight:500;font-size:13px}
+.top{display:flex;gap:8px;align-items:center}
+.lang button,.pill{border:1px solid var(--line);background:var(--card);color:var(--ink);padding:5px 10px;border-radius:999px;font-weight:600;cursor:pointer;font-size:14px}
+.lang button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:14px}
+.hero h1{margin:0 0 8px;font-size:23px;line-height:1.3;letter-spacing:-.02em}
+.hero p{margin:0;color:var(--muted)}
+.tally{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
+.chip.ok{background:var(--ok-bg);color:var(--ok)} .chip.bad{background:var(--bad-bg);color:var(--bad)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)} .chip.unk{background:var(--unk-bg);color:var(--unk)}
+.how{font-size:14px;color:var(--muted)} .how b{color:var(--ink)}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:10px}
+.legend div{display:flex;flex-direction:column;gap:2px}
+.svc{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden}
+.svc-h{padding:14px 18px;border-bottom:1px solid var(--line)}
+.svc-h b{font-size:17px} .svc-h p{margin:2px 0 0;color:var(--muted);font-size:14px}
+.stats{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:flex-end;padding:12px 18px;background:var(--soft);border-bottom:1px solid var(--line)}
+.stat small{display:block;color:var(--muted);font-size:12px} .stat b{font-size:17px}
+.bars{display:flex;align-items:flex-end;gap:3px;height:32px;margin-left:auto}
+.bars i{display:block;width:7px;border-radius:2px;background:var(--muted);opacity:.45}
+.small{font-size:13px;color:var(--muted)}
+.row{padding:16px 18px;border-bottom:1px solid var(--line)} .row:last-child{border-bottom:0}
+.row-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.row .t{font-weight:700;font-size:16px}
+.row .d{margin-top:4px;overflow-wrap:anywhere}
+.advice{margin-top:8px;padding:10px 12px;border-radius:10px;background:var(--bad-bg);color:var(--ink);font-size:14.5px}
+.row .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+details{margin-top:8px;background:var(--soft);border-radius:10px;padding:2px 12px}
+summary{cursor:pointer;font-weight:600;font-size:14px;padding:8px 0;color:var(--muted)}
+details p{margin:0 0 10px;font-size:14.5px} details p b{display:block;font-size:13px;color:var(--muted);margin-bottom:2px}
+.btn{border:0;background:var(--accent);color:var(--accent-ink);padding:8px 14px;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;text-decoration:none;display:inline-block}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn[disabled]{opacity:.5;cursor:wait}
+.foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-top:20px;color:var(--muted);font-size:14px}
+.loading{text-align:center;padding:48px 16px;color:var(--muted)}
+.spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--ink);border-radius:50%;margin:0 auto 14px;animation:s 1s linear infinite}
+@keyframes s{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){.spin{animation:none}}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--accent);color:var(--accent-ink);padding:10px 16px;border-radius:12px;font-weight:600;max-width:calc(100% - 32px);display:none}
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:480px;width:calc(100% - 32px);padding:20px}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h3{margin:0 0 8px} dialog ul{padding-left:18px;margin:8px 0} dialog li{margin:4px 0}
+dialog .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo">VibeAmigo<span data-i18n="tag"></span></div>
+    <div class="top"><button class="pill" id="rescan" data-i18n="rescan"></button><div class="lang"><button data-l="tr">TR</button> <button data-l="en">EN</button></div></div>
+  </header>
+  <div id="app"><div class="loading"><div class="spin"></div><span data-i18n="loading"></span></div></div>
+  <div class="foot"><span data-i18n="local"></span><button class="btn ghost" id="share" data-i18n="share"></button></div>
+</div>
+
+<dialog id="dlg">
+  <h3 data-i18n="dT"></h3>
+  <ul id="dL"></ul>
+  <p class="small" data-i18n="undo"></p>
+  <div class="acts"><button class="btn ghost" id="dNo" data-i18n="cancel"></button><button class="btn" id="dYes" data-i18n="apply"></button></div>
+</dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+const TOKEN = document.querySelector('meta[name=va-token]').content;
+const S = {
+  ok:{c:'ok',tr:'Güvende',en:'Safe',ltr:'Ayar açık ve kontrol edildi.',len:'The setting is on and checked.'},
+  bad:{c:'bad',tr:'Risk var',en:'At risk',ltr:'Koruma kapalı. Düzeltmeni öneririz.',len:'Protection is off. We suggest fixing it.'},
+  warn:{c:'warn',tr:'Eksik',en:'Partial',ltr:'Koruma var ama bir kısmı açıkta.',len:'Protection exists but part of it is open.'},
+  unk:{c:'unk',tr:'Senin bakman lazım',en:'Please check',ltr:'Bu ayarı biz göremiyoruz. Link verip soruyoruz.',len:"We can't see this setting. We give you a link and ask."},
+};
+const T = {
+  tr:{tag:'Siten için fatura ve güvenlik kontrolü',loading:'Hesaplarına ve koduna bakıyorum. 1-2 dakika sürebilir…',rescan:'Yeniden tara',
+    heroBad:n=>`${n} koruman kapalı. Bir saldırıda faturanın üst sınırı olmayabilir.`,heroOk:'Kapalı bir koruma bulunmadı.',
+    heroP:'Kırmızıları düzeltmek birkaç dakika sürer. Sen onaylamadan hiçbir şey değişmez.',
+    heroPok:'Sarı ve mavi satırlara bir göz at. Sen onaylamadan hiçbir şey değişmez.',
+    howT:'Renkler ne demek?',howP:'Her satırın altındaki "Bu ne demek?" kısmına tıklayınca sade bir açıklama var.',
+    local:'Her şey kendi bilgisayarında çalışıyor. Şifrelerin hiçbir yere gönderilmiyor.',share:'Sonucu kopyala',
+    more:'Bu ne demek?',whatL:'Ne demek?',whyL:'Neden önemli?',fix:'Düzelt',lower:'Düşür',open:'Ayara git ↗',yes:'Baktım, açık',no:'Kapalı',
+    dT:'Şunu yapacağım:',undo:'Bu ayarı istediğin zaman ilgili servisin panelinden geri alabilirsin.',cancel:'Vazgeç',apply:'Onayla',
+    working:'Uyguluyorum…',done:'Tamam, uygulandı. Yeniden tarıyorum.',failed:'Bir kısmı uygulanamadı:',copied:'Özet panoya kopyalandı.',err:'Tarama başarısız:'},
+  en:{tag:'Bill & security check for your site',loading:'Checking your accounts and code. This can take 1-2 minutes…',rescan:'Scan again',
+    heroBad:n=>`${n} protections are off. An attack could give you a bill with no ceiling.`,heroOk:'No protection is switched off.',
+    heroP:'Fixing the reds takes a few minutes. Nothing changes without your approval.',
+    heroPok:'Have a look at the yellow and blue rows. Nothing changes without your approval.',
+    howT:'What do the colors mean?',howP:'Click "What does this mean?" under any row for a plain explanation.',
+    local:'Everything runs on your computer. Your keys are never sent anywhere.',share:'Copy summary',
+    more:'What does this mean?',whatL:'What is it?',whyL:'Why does it matter?',fix:'Fix',lower:'Lower',open:'Open setting ↗',yes:"Checked, it's on",no:"It's off",
+    dT:'Here is what I will do:',undo:"You can undo this any time in the service's dashboard.",cancel:'Cancel',apply:'Approve',
+    working:'Applying…',done:'Done. Scanning again.',failed:'Some parts failed:',copied:'Summary copied.',err:'Scan failed:'},
+};
+let L = (()=>{try{return localStorage.getItem('va-lang')||((navigator.language||'').startsWith('tr')?'tr':'en')}catch{return 'tr'}})();
+let DATA = null;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const tx = v => typeof v === 'string' ? v : (v?.[L] ?? v?.tr ?? '');
+const api = (p, body) => fetch(p, { method: body ? 'POST' : 'GET', headers: { 'x-va-token': TOKEN, ...(body ? { 'content-type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined }).then(r => r.json());
+function toast(msg, ms = 3500){ const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', ms); }
+
+function static(){
+  document.documentElement.lang = L;
+  document.querySelectorAll('[data-i18n]').forEach(e => { const v = T[L][e.dataset.i18n]; if (typeof v === 'string') e.textContent = v; });
+  document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('on', b.dataset.l === L));
+}
+
+function render(){
+  static();
+  if (!DATA) return;
+  const all = DATA.services.flatMap(s => s.checks);
+  const cnt = k => all.filter(c => c.status === k).length;
+  const bad = cnt('bad');
+  const stats = st => !st ? '' : `<div class="stats">${(st.items||[]).map(i => `<div class="stat"><small>${esc(tx(i))}</small><b>${esc(tx(i.v))}</b></div>`).join('')}${st.bars?.length ? `<div class="bars">${(() => { const m = Math.max(...st.bars, 0.0001); return st.bars.map(b => `<i style="height:${Math.max(3, b / m * 32)}px"></i>`).join(''); })()}</div>` : ''}${st.note ? `<div class="small" style="width:100%">${esc(tx(st.note))}</div>` : ''}</div>`;
+  const row = c => `<div class="row" data-id="${esc(c.id)}">
+    <div class="row-top"><div class="t">${esc(tx(c.title))}</div><span class="chip ${S[c.status]?.c||'unk'}">● ${esc(S[c.status]?.[L]||'?')}</span></div>
+    <div class="d">${esc(tx(c.detail))}</div>
+    ${c.advice ? `<div class="advice">${esc(tx(c.advice))}</div>` : ''}
+    ${c.what ? `<details><summary>${T[L].more}</summary><p><b>${T[L].whatL}</b>${esc(tx(c.what))}</p><p><b>${T[L].whyL}</b>${esc(tx(c.why))}</p></details>` : ''}
+    ${(c.fix || c.link || c.manual) ? `<div class="acts">
+      ${c.fix ? `<button class="btn" data-fix="${esc(c.fix.key)}">${T[L][c.fix.label] || T[L].fix}</button>` : ''}
+      ${c.link ? `<a class="btn ghost" href="${esc(c.link)}" target="_blank" rel="noopener noreferrer">${T[L].open}</a>` : ''}
+      ${c.manual ? `<button class="btn ghost" data-ans="yes" data-q="${esc(c.id)}">${T[L].yes}</button><button class="btn ghost" data-ans="no" data-q="${esc(c.id)}">${T[L].no}</button>` : ''}
+    </div>` : ''}
+  </div>`;
+  document.getElementById('app').innerHTML = `
+    <section class="card hero"><h1>${esc(bad ? T[L].heroBad(bad) : T[L].heroOk)}</h1><p>${esc(bad ? T[L].heroP : T[L].heroPok)}</p>
+      <div class="tally">${['bad','warn','unk','ok'].filter(k => cnt(k)).map(k => `<span class="chip ${S[k].c}">● ${cnt(k)} ${esc(S[k][L].toLowerCase())}</span>`).join('')}</div></section>
+    <section class="card how"><div><b>${T[L].howT}</b> ${T[L].howP}</div>
+      <div class="legend">${['ok','bad','warn','unk'].map(k => `<div><span class="chip ${S[k].c}">● ${S[k][L]}</span><span>${S[k]['l'+L]}</span></div>`).join('')}</div></section>
+    ${DATA.services.map(s => `<section class="svc"><div class="svc-h"><b>${esc(tx(s.name))}</b><p>${esc(tx(s.sub))}</p></div>${stats(s.stats)}${s.checks.map(row).join('')}</section>`).join('')}`;
+}
+
+async function scan(){
+  DATA = null;
+  document.getElementById('app').innerHTML = `<div class="loading"><div class="spin"></div>${esc(T[L].loading)}</div>`;
+  try {
+    const d = await api('/api/scan');
+    if (d.error) throw new Error(d.error);
+    DATA = d; render();
+  } catch (e) { document.getElementById('app').innerHTML = `<div class="card">${esc(T[L].err)} ${esc(e.message)}</div>`; }
+}
+
+let pending = null;
+document.addEventListener('click', async e => {
+  const f = e.target.closest('[data-fix]');
+  if (f) {
+    const c = DATA.services.flatMap(s => s.checks).find(x => x.fix?.key === f.dataset.fix);
+    pending = { key: f.dataset.fix, btn: f };
+    document.getElementById('dL').innerHTML = (c.fix.plan?.[L] || []).map(x => `<li>${esc(x)}</li>`).join('');
+    document.getElementById('dlg').showModal();
+    return;
+  }
+  const a = e.target.closest('[data-ans]');
+  if (a) { await api('/api/answer', { id: a.dataset.q, value: a.dataset.ans }); scan(); }
+});
+document.getElementById('dNo').onclick = () => { pending = null; document.getElementById('dlg').close(); };
+document.getElementById('dYes').onclick = async () => {
+  document.getElementById('dlg').close();
+  if (!pending) return;
+  const { key, btn } = pending; pending = null;
+  btn.disabled = true; btn.textContent = T[L].working;
+  const r = await api('/api/fix', { key });
+  if (r.ok) { toast(T[L].done); scan(); }
+  else { toast(`${T[L].failed} ${(r.log || [r.error]).join(' · ')}`, 8000); btn.disabled = false; btn.textContent = T[L].fix; }
+};
+document.getElementById('rescan').onclick = scan;
+document.getElementById('share').onclick = () => {
+  if (!DATA) return;
+  const all = DATA.services.flatMap(s => s.checks);
+  const n = k => all.filter(c => c.status === k).length;
+  const text = L === 'tr'
+    ? `VibeAmigo ile hesaplarımı taradım: ${n('ok')} güvende, ${n('bad')} risk, ${n('warn')} eksik, ${n('unk')} elle kontrol. Sen de dene: npx vibeamigo`
+    : `I scanned my accounts with VibeAmigo: ${n('ok')} safe, ${n('bad')} at risk, ${n('warn')} partial, ${n('unk')} to check. Try it: npx vibeamigo`;
+  navigator.clipboard.writeText(text).then(() => toast(T[L].copied));
+};
+document.querySelectorAll('.lang button').forEach(b => b.onclick = () => { L = b.dataset.l; try { localStorage.setItem('va-lang', L) } catch {} render(); });
+static();
+scan();
+</script>
+</body>
+</html>
