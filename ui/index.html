@@ -191,8 +191,8 @@ document.getElementById('share').onclick = () => {
   const all = DATA.services.flatMap(s => s.checks);
   const n = k => all.filter(c => c.status === k).length;
   const text = L === 'tr'
-    ? `VibeAmigo ile hesaplarımı taradım: ${n('ok')} güvende, ${n('bad')} risk, ${n('warn')} eksik, ${n('unk')} elle kontrol. Sen de dene: npx vibeamigo`
-    : `I scanned my accounts with VibeAmigo: ${n('ok')} safe, ${n('bad')} at risk, ${n('warn')} partial, ${n('unk')} to check. Try it: npx vibeamigo`;
+    ? `VibeAmigo ile hesaplarımı taradım: ${n('ok')} güvende, ${n('bad')} risk, ${n('warn')} eksik, ${n('unk')} elle kontrol. Sen de dene: npx github:sedattkahraman/vibeamigo`
+    : `I scanned my accounts with VibeAmigo: ${n('ok')} safe, ${n('bad')} at risk, ${n('warn')} partial, ${n('unk')} to check. Try it: npx github:sedattkahraman/vibeamigo`;
   navigator.clipboard.writeText(text).then(() => toast(T[L].copied));
 };
 document.querySelectorAll('.lang button').forEach(b => b.onclick = () => { L = b.dataset.l; try { localStorage.setItem('va-lang', L) } catch {} render(); });
