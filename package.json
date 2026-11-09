@@ -1,7 +1,7 @@
 {
   "name": "vibeamigo",
-  "version": "0.1.0",
-  "description": "Spend and security check for vibe-coded apps. Finds the kill switches you forgot to turn on (Vercel, OpenAI, Supabase, Gemini, Twilio) and leaked keys in your code. Runs locally, sends nothing anywhere.",
+  "version": "0.2.0",
+  "description": "Monitor and brakes for vibe-coded apps: see what you spend on Vercel, find the protections you forgot, drill your kill switches to prove they work, hit a panic button, and run a watchdog. Local, sends nothing anywhere.",
   "type": "module",
   "bin": {
     "vibeamigo": "bin/vibeamigo.js"
@@ -10,6 +10,7 @@
     "bin",
     "src",
     "ui",
+    "templates",
     "README.md",
     "LICENSE"
   ],
@@ -27,7 +28,10 @@
     "spend",
     "kill-switch",
     "vibe-coding",
-    "secrets"
+    "secrets",
+    "rate-limit",
+    "watchdog",
+    "monitoring"
   ],
   "author": "Sedat Kahraman (https://sedatkahraman.com)",
   "license": "MIT"

@@ -1,0 +1,24 @@
+# VibeAmigo bekçi / watchdog
+# Bu dosyayı ÖZEL (private) bir GitHub reposunda .github/workflows/vibeamigo-watch.yml olarak kaydet.
+# Gerekli secret: VERCEL_TOKEN (vercel.com/account/tokens). İsteğe bağlı: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID.
+# Alarm olursa iş "başarısız" biter ve GitHub sana e-posta atar.
+name: VibeAmigo watchdog
+
+on:
+  schedule:
+    - cron: "*/30 * * * *" # 30 dakikada bir: özel repoda GitHub'ın ücretsiz aylık kotasına sığar
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # Sürüm sabit: bu iş hesabına tam yetkili bir anahtarla çalışır, o yüzden hangi kodu çalıştırdığı belli olmalı.
+      - run: npx -y github:sedattkahraman/vibeamigo#v0.2.0 watch --brake attack --lang tr
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

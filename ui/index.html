@@ -9,17 +9,17 @@
 :root{
   --bg:#f6f5f1; --card:#ffffff; --ink:#18181b; --muted:#5f5f66; --line:#e4e2dc; --soft:#f3f2ee;
   --ok:#1f7a4d; --ok-bg:#e3f3ea; --bad:#b4271f; --bad-bg:#fbe5e2; --warn:#9a6200; --warn-bg:#fdf0d5;
-  --unk:#3f5fa8; --unk-bg:#e6ecf8; --accent:#18181b; --accent-ink:#fff;
+  --unk:#3f5fa8; --unk-bg:#e6ecf8; --idle:#55565c; --idle-bg:#ecebe7; --accent:#18181b; --accent-ink:#fff;
 }
 @media (prefers-color-scheme: dark){
   :root{ --bg:#121214; --card:#1b1b1f; --ink:#f1f0ec; --muted:#a3a2a8; --line:#2c2c31; --soft:#222227;
     --ok:#5fd39a; --ok-bg:#163a28; --bad:#ff8a7e; --bad-bg:#43191a; --warn:#f2c160; --warn-bg:#3d2f10;
-    --unk:#9db6ff; --unk-bg:#1d2a47; --accent:#f1f0ec; --accent-ink:#121214; }
+    --unk:#9db6ff; --unk-bg:#1d2a47; --idle:#b6b5bb; --idle-bg:#2a2a2f; --accent:#f1f0ec; --accent-ink:#121214; }
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,sans-serif}
 .wrap{max-width:860px;margin:0 auto;padding:24px 16px 64px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px;flex-wrap:wrap}
 .logo{font-weight:800;font-size:20px;letter-spacing:-.02em}
 .logo span{display:block;color:var(--muted);font-weight:500;font-size:13px}
 .top{display:flex;gap:8px;align-items:center}
@@ -29,42 +29,63 @@ header{display:flex;align-items:center;justify-content:space-between;gap:12px;ma
 .hero h1{margin:0 0 8px;font-size:23px;line-height:1.3;letter-spacing:-.02em}
 .hero p{margin:0;color:var(--muted)}
 .tally{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap}
-.chip.ok{background:var(--ok-bg);color:var(--ok)} .chip.bad{background:var(--bad-bg);color:var(--bad)}
-.chip.warn{background:var(--warn-bg);color:var(--warn)} .chip.unk{background:var(--unk-bg);color:var(--unk)}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:13px;font-weight:700;white-space:nowrap;border:1.5px solid transparent}
+.chip.tested{background:var(--ok);color:var(--card)}
+.chip.on{background:var(--ok-bg);color:var(--ok)}
+.chip.bad{background:var(--bad-bg);color:var(--bad)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.chip.unk{background:var(--unk-bg);color:var(--unk)}
+.chip.idle{background:var(--idle-bg);color:var(--idle)}
 .how{font-size:14px;color:var(--muted)} .how b{color:var(--ink)}
-.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;margin-top:10px}
-.legend div{display:flex;flex-direction:column;gap:2px}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
+.legend div{display:flex;flex-direction:column;gap:3px;align-items:flex-start}
 .svc{background:var(--card);border:1px solid var(--line);border-radius:16px;margin-bottom:12px;overflow:hidden}
 .svc-h{padding:14px 18px;border-bottom:1px solid var(--line)}
 .svc-h b{font-size:17px} .svc-h p{margin:2px 0 0;color:var(--muted);font-size:14px}
 .stats{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:flex-end;padding:12px 18px;background:var(--soft);border-bottom:1px solid var(--line)}
 .stat small{display:block;color:var(--muted);font-size:12px} .stat b{font-size:17px}
 .bars{display:flex;align-items:flex-end;gap:3px;height:32px;margin-left:auto}
-.bars i{display:block;width:7px;border-radius:2px;background:var(--muted);opacity:.45}
+.bars i{display:block;width:6px;border-radius:2px;background:var(--muted);opacity:.5}
 .small{font-size:13px;color:var(--muted)}
+.emer{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.emer.live{background:var(--bad-bg)}
+.emer b{display:block} .emer span{font-size:14px;color:var(--muted)} .emer.live span{color:var(--ink)}
+.emer .acts{display:flex;gap:8px;flex-wrap:wrap}
 .row{padding:16px 18px;border-bottom:1px solid var(--line)} .row:last-child{border-bottom:0}
 .row-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
 .row .t{font-weight:700;font-size:16px}
 .row .d{margin-top:4px;overflow-wrap:anywhere}
-.advice{margin-top:8px;padding:10px 12px;border-radius:10px;background:var(--bad-bg);color:var(--ink);font-size:14.5px}
+.worst{margin-top:6px;font-weight:600;font-size:14.5px}
+.advice{margin-top:8px;padding:10px 12px;border-radius:10px;background:var(--warn-bg);color:var(--ink);font-size:14.5px}
 .row .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 details{margin-top:8px;background:var(--soft);border-radius:10px;padding:2px 12px}
 summary{cursor:pointer;font-weight:600;font-size:14px;padding:8px 0;color:var(--muted)}
-details p{margin:0 0 10px;font-size:14.5px} details p b{display:block;font-size:13px;color:var(--muted);margin-bottom:2px}
-.btn{border:0;background:var(--accent);color:var(--accent-ink);padding:8px 14px;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;text-decoration:none;display:inline-block}
-.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+details p,details ul{margin:0 0 10px;font-size:14.5px} details ul{padding-left:18px}
+details b{display:block;font-size:13px;color:var(--muted);margin-bottom:2px}
+.btn{border:1px solid transparent;background:var(--accent);color:var(--accent-ink);padding:8px 14px;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;text-decoration:none;display:inline-block;font-family:inherit}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn.danger{background:transparent;color:var(--bad);border-color:var(--bad)}
 .btn[disabled]{opacity:.5;cursor:wait}
 .foot{display:flex;flex-wrap:wrap;gap:10px;justify-content:space-between;align-items:center;margin-top:20px;color:var(--muted);font-size:14px}
 .loading{text-align:center;padding:48px 16px;color:var(--muted)}
 .spin{width:28px;height:28px;border:3px solid var(--line);border-top-color:var(--ink);border-radius:50%;margin:0 auto 14px;animation:s 1s linear infinite}
 @keyframes s{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion: reduce){.spin{animation:none}}
-.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--accent);color:var(--accent-ink);padding:10px 16px;border-radius:12px;font-weight:600;max-width:calc(100% - 32px);display:none}
-dialog{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:480px;width:calc(100% - 32px);padding:20px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--accent);color:var(--accent-ink);padding:10px 16px;border-radius:12px;font-weight:600;max-width:calc(100% - 32px);display:none;z-index:5}
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:500px;width:calc(100% - 32px);padding:20px}
 dialog::backdrop{background:rgba(0,0,0,.45)}
 dialog h3{margin:0 0 8px} dialog ul{padding-left:18px;margin:8px 0} dialog li{margin:4px 0}
 dialog .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-wrap:wrap}
+.picker{margin-top:12px}
+.picker-h{display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:700;margin-bottom:6px;gap:8px}
+.picker-h button{background:none;border:0;color:var(--muted);font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;padding:0 4px}
+.picker-list{max-height:210px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.picker-list label{display:flex;gap:8px;align-items:center;padding:4px 0;font-size:14.5px;cursor:pointer}
+select{width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+pre{margin:8px 0;padding:10px 12px;border-radius:10px;background:var(--soft);border:1px solid var(--line);font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;overflow:auto;white-space:pre}
+.watch h3{margin:0 0 6px;font-size:17px} .watch h4{margin:16px 0 4px;font-size:15px}
+.watch p,.watch li{font-size:14.5px} .watch ol{padding-left:20px;margin:6px 0}
+.copy{display:flex;gap:8px;align-items:flex-start} .copy pre{flex:1;min-width:0;margin:0}
 </style>
 </head>
 <body>
@@ -78,125 +99,220 @@ dialog .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:16px;flex-
 </div>
 
 <dialog id="dlg">
-  <h3 data-i18n="dT"></h3>
+  <h3 id="dT"></h3>
   <ul id="dL"></ul>
-  <p class="small" data-i18n="undo"></p>
-  <div class="acts"><button class="btn ghost" id="dNo" data-i18n="cancel"></button><button class="btn" id="dYes" data-i18n="apply"></button></div>
+  <div id="dPick"></div>
+  <p class="small" id="dNote"></p>
+  <div class="acts"><button class="btn ghost" id="dNo" data-i18n="cancel"></button><button class="btn" id="dYes"></button></div>
+</dialog>
+<dialog id="res">
+  <h3 id="rT"></h3>
+  <p id="rP" style="margin:0"></p>
+  <div class="acts"><button class="btn" id="rOk" data-i18n="close"></button></div>
 </dialog>
 <div class="toast" id="toast"></div>
 
 <script>
 const TOKEN = document.querySelector('meta[name=va-token]').content;
+const $ = id => document.getElementById(id);
+// Durum etiketleri. "Denendi" sadece gerçek bir tatbikattan geçen frenlere verilir.
 const S = {
-  ok:{c:'ok',tr:'Güvende',en:'Safe',ltr:'Ayar açık ve kontrol edildi.',len:'The setting is on and checked.'},
-  bad:{c:'bad',tr:'Risk var',en:'At risk',ltr:'Koruma kapalı. Düzeltmeni öneririz.',len:'Protection is off. We suggest fixing it.'},
+  tested:{c:'tested',tr:'✓ Denendi',en:'✓ Tested',ltr:'Gerçekten denedik ve çalıştı. En güçlü durum.',len:'We really tested it and it worked. The strongest state.'},
+  on:{c:'on',tr:'Açık',en:'On',ltr:'Ayar açık; servisten okuduk. Ama çalıştığı denenmedi.',len:'The setting is on; we read it from the service. Not tested though.'},
+  clean:{c:'on',tr:'Temiz',en:'Clean'},
+  self:{c:'on',tr:'Sen onayladın',en:'You confirmed'},
+  ready:{c:'idle',tr:'Hazır, denenmedi',en:'Ready, untested',ltr:'Fren hazır ama hiç denenmedi. "Dene" ile sına.',len:'The brake is ready but never tested. Use "Test it".'},
+  bad:{c:'bad',tr:'Risk var',en:'At risk',ltr:'Koruma kapalı ya da çalışmıyor. Düzeltmeni öneririz.',len:"Protection is off or doesn't work. We suggest fixing it."},
   warn:{c:'warn',tr:'Eksik',en:'Partial',ltr:'Koruma var ama bir kısmı açıkta.',len:'Protection exists but part of it is open.'},
   unk:{c:'unk',tr:'Senin bakman lazım',en:'Please check',ltr:'Bu ayarı biz göremiyoruz. Link verip soruyoruz.',len:"We can't see this setting. We give you a link and ask."},
 };
 const T = {
-  tr:{tag:'Siten için fatura ve güvenlik kontrolü',loading:'Hesaplarına ve koduna bakıyorum. 1-2 dakika sürebilir…',rescan:'Yeniden tara',
-    heroBad:n=>`${n} koruman kapalı. Bir saldırıda faturanın üst sınırı olmayabilir.`,heroOk:'Kapalı bir koruma bulunmadı.',
-    heroP:'Kırmızıları düzeltmek birkaç dakika sürer. Sen onaylamadan hiçbir şey değişmez.',
-    heroPok:'Sarı ve mavi satırlara bir göz at. Sen onaylamadan hiçbir şey değişmez.',
-    howT:'Renkler ne demek?',howP:'Her satırın altındaki "Bu ne demek?" kısmına tıklayınca sade bir açıklama var.',
+  tr:{tag:'Siten için fatura ve güvenlik kontrolü',loading:'Hesaplarına ve koduna bakıyorum. Yarım dakika kadar sürer…',rescan:'Yeniden tara',
+    heroLive:'Şu an acil durum modundasın.',heroLiveP:'Aşağıdaki kırmızı çubuktan "Normale dön" ile eski hâline getirebilirsin.',
+    heroBad:n=>`${n} koruman kapalı. Bir saldırıda faturanın üst sınırı olmayabilir.`,heroP:'Kırmızıları düzeltmek birkaç dakika sürer. Sen onaylamadan hiçbir şey değişmez.',
+    heroUntested:'Kapalı bir koruma yok, ama frenlerin hiç denenmedi.',heroUntestedP:'Bir ayarın açık olması çalıştığını kanıtlamaz. "Dene" düğmeleriyle frenlerini gerçekten sına.',
+    heroOk:n=>`Kapalı bir koruma yok. ${n} fren gerçekten denendi.`,heroOkP:'Sarı ve mavi satırlara da bir göz at. Yüzde yüz koruma yoktur; amaç kaybın üst sınırını bilmek.',
+    howT:'Etiketler ne demek?',howP:'Her satırın altındaki "Bu ne demek?" kısmında sade bir açıklama ve o korumanın neyi kapsamadığı yazıyor.',
     local:'Her şey kendi bilgisayarında çalışıyor. Şifrelerin hiçbir yere gönderilmiyor.',share:'Sonucu kopyala',
-    more:'Bu ne demek?',whatL:'Ne demek?',whyL:'Neden önemli?',fix:'Düzelt',lower:'Düşür',open:'Ayara git ↗',yes:'Baktım, açık',no:'Kapalı',
-    dT:'Şunu yapacağım:',undo:'Bu ayarı istediğin zaman ilgili servisin panelinden geri alabilirsin.',cancel:'Vazgeç',apply:'Onayla',
-    working:'Uyguluyorum…',done:'Tamam, uygulandı. Yeniden tarıyorum.',failed:'Bir kısmı uygulanamadı:',copied:'Özet panoya kopyalandı.',err:'Tarama başarısız:'},
-  en:{tag:'Bill & security check for your site',loading:'Checking your accounts and code. This can take 1-2 minutes…',rescan:'Scan again',
-    heroBad:n=>`${n} protections are off. An attack could give you a bill with no ceiling.`,heroOk:'No protection is switched off.',
-    heroP:'Fixing the reds takes a few minutes. Nothing changes without your approval.',
-    heroPok:'Have a look at the yellow and blue rows. Nothing changes without your approval.',
-    howT:'What do the colors mean?',howP:'Click "What does this mean?" under any row for a plain explanation.',
+    more:'Bu ne demek?',whatL:'Ne demek?',whyL:'Neden önemli?',limitsL:'Neyi kapsamaz?',
+    fix:'Düzelt',lower:'Düşür',drill:'Dene',open:'Ayara git ↗',yes:'Baktım, açık',no:'Kapalı',
+    dFix:'Şunu yapacağım:',dDrill:'Tatbikat: şunu yapacağım',undo:'Bu ayarı istediğin zaman ilgili servisin panelinden geri alabilirsin.',cancel:'Vazgeç',apply:'Onayla',start:'Başlat',close:'Tamam',
+    pickMany:'Hangi siteler?',pickOne:'Hangi sitede deneyeyim?',all:'Hepsi',none:'Hiçbiri',pickErr:'En az bir site seç.',
+    working:'Uyguluyorum…',drilling:'Deniyorum… 1 dakika kadar sürebilir, sayfayı kapatma.',done:'Tamam, uygulandı. Yeniden tarıyorum.',failed:'Bir kısmı uygulanamadı:',copied:'Kopyalandı.',err:'Tarama başarısız:',
+    rOk:'✓ Fren çalışıyor',rBad:'✗ Fren çalışmadı',rUnk:'Sonuç belirsiz, kaydedilmedi',
+    rPassed:(p,n,s)=>`${p} sitesinde ${n} istek geçti, sonrakiler durduruldu (cevap: ${s}).`,rTimed:(p,a,b)=>`${p} sitesinde ${a} saniyede devreye girdi, ${b} saniyede eski hâline döndü.`,
+    emT:'Acil durum',emIdle:'Her şey normal. Saldırı anında buradan tek tıkla fren çekebilirsin.',emAttack:n=>`${n} sitede saldırı modu açık`,emPaused:n=>`${n} site durdurulmuş (kapalı)`,
+    wT:'Bekçi: sen bakmazken de izlesin',wP:'Bu panel sadece açıkken bakar. Bekçi aynı kontrolleri düzenli aralıklarla yapar: harcama sınırın duruyor mu, yeni bir siteye kural eklenmiş mi, bir sitede ani artış var mı. Sorun görürse haber verir; istersen o sitede saldırı modunu kendisi açar.',
+    wLast:d=>`Bu bilgisayarda son çalışma: ${d}`,wNever:'Bu bilgisayarda henüz hiç çalışmadı.',
+    wA:'1. Bilgisayarın açıkken',wAp:'Bir terminal penceresinde şunu çalıştır ve açık bırak. 5 dakikada bir kontrol eder.',
+    wB:'2. Günün her saati, GitHub\'da (ücretsiz)',wB1:'GitHub\'da özel (private) bir repo aç.',wB2:'Vercel\'de bir erişim anahtarı (token) oluştur ve repoya VERCEL_TOKEN adıyla "secret" olarak ekle.',wB3:'Şu dosyayı repoya .github/workflows/vibeamigo-watch.yml adıyla ekle:',
+    wLim:'Bilmen gereken: Bekçi yavaş sızıntıları ve ayar değişikliklerini yakalar; GitHub\'da 30 dakikada bir çalışır. Ani bir patlamayı ilk dakikada durduran şey aşırı ziyaret engeli ve harcama sınırıdır. Vercel anahtarı hesabına tam yetkilidir; onu sadece kendi özel repona koy.',
+    wTok:'Anahtar sayfası ↗',copy:'Kopyala'},
+  en:{tag:'Bill & security check for your site',loading:'Checking your accounts and code. About half a minute…',rescan:'Scan again',
+    heroLive:'You are in emergency mode right now.',heroLiveP:'Use "Back to normal" in the red bar below to restore things.',
+    heroBad:n=>`${n} protections are off. An attack could give you a bill with no ceiling.`,heroP:'Fixing the reds takes a few minutes. Nothing changes without your approval.',
+    heroUntested:'No protection is off, but your brakes were never tested.',heroUntestedP:'A setting being on doesn\'t prove it works. Use the "Test it" buttons to really try your brakes.',
+    heroOk:n=>`No protection is off. ${n} brakes were really tested.`,heroOkP:'Have a look at the yellow and blue rows too. Nothing is 100% safe; the goal is to know your worst case.',
+    howT:'What do the labels mean?',howP:'"What does this mean?" under each row has a plain explanation and what that protection does not cover.',
     local:'Everything runs on your computer. Your keys are never sent anywhere.',share:'Copy summary',
-    more:'What does this mean?',whatL:'What is it?',whyL:'Why does it matter?',fix:'Fix',lower:'Lower',open:'Open setting ↗',yes:"Checked, it's on",no:"It's off",
-    dT:'Here is what I will do:',undo:"You can undo this any time in the service's dashboard.",cancel:'Cancel',apply:'Approve',
-    working:'Applying…',done:'Done. Scanning again.',failed:'Some parts failed:',copied:'Summary copied.',err:'Scan failed:'},
+    more:'What does this mean?',whatL:'What is it?',whyL:'Why does it matter?',limitsL:"What doesn't it cover?",
+    fix:'Fix',lower:'Lower',drill:'Test it',open:'Open setting ↗',yes:"Checked, it's on",no:"It's off",
+    dFix:'Here is what I will do:',dDrill:'Drill: here is what I will do',undo:"You can undo this any time in the service's dashboard.",cancel:'Cancel',apply:'Approve',start:'Start',close:'OK',
+    pickMany:'Which sites?',pickOne:'Which site should I test on?',all:'All',none:'None',pickErr:'Pick at least one site.',
+    working:'Applying…',drilling:"Testing… this can take about a minute, don't close the page.",done:'Done. Scanning again.',failed:'Some parts failed:',copied:'Copied.',err:'Scan failed:',
+    rOk:'✓ The brake works',rBad:'✗ The brake did not work',rUnk:'Inconclusive, not recorded',
+    rPassed:(p,n,s)=>`On ${p}, ${n} requests passed and the rest were blocked (response: ${s}).`,rTimed:(p,a,b)=>`On ${p} it kicked in after ${a}s and was back to normal after ${b}s.`,
+    emT:'Emergency',emIdle:'All normal. During an attack you can hit the brakes here with one click.',emAttack:n=>`Attack mode is on for ${n} sites`,emPaused:n=>`${n} sites are paused (down)`,
+    wT:"Watchdog: keep watch while you don't",wP:'This panel only checks while it is open. The watchdog runs the same checks on a schedule: is your spending limit still there, did a new site get the rule, is one site spiking. It tells you when something is wrong and can turn on attack mode for that site by itself.',
+    wLast:d=>`Last run on this computer: ${d}`,wNever:'It has never run on this computer.',
+    wA:'1. While your computer is on',wAp:'Run this in a terminal window and leave it open. It checks every 5 minutes.',
+    wB:'2. Around the clock, on GitHub (free)',wB1:'Create a private repo on GitHub.',wB2:'Create an access token in Vercel and add it to the repo as a secret named VERCEL_TOKEN.',wB3:'Add this file to the repo as .github/workflows/vibeamigo-watch.yml:',
+    wLim:'Good to know: the watchdog catches slow leaks and changed settings; on GitHub it runs every 30 minutes. What stops a sudden burst in the first minute is the rate limit and the spending limit. A Vercel token has full access to your account; keep it only in your own private repo.',
+    wTok:'Token page ↗',copy:'Copy'},
 };
+const RUN = 'npx github:sedattkahraman/vibeamigo';
 let L = (()=>{try{return localStorage.getItem('va-lang')||((navigator.language||'').startsWith('tr')?'tr':'en')}catch{return 'tr'}})();
 let DATA = null;
+const ACTIONS = new Map();
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const tx = v => typeof v === 'string' ? v : (v?.[L] ?? v?.tr ?? '');
 const api = (p, body) => fetch(p, { method: body ? 'POST' : 'GET', headers: { 'x-va-token': TOKEN, ...(body ? { 'content-type': 'application/json' } : {}) }, body: body ? JSON.stringify(body) : undefined }).then(r => r.json());
-function toast(msg, ms = 3500){ const t = document.getElementById('toast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', ms); }
+function toast(msg, ms = 3500){ const t = $('toast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = 'none', ms); }
+const copyText = t => navigator.clipboard.writeText(t).then(() => toast(T[L].copied));
 
-function static(){
+function fixed(){
   document.documentElement.lang = L;
   document.querySelectorAll('[data-i18n]').forEach(e => { const v = T[L][e.dataset.i18n]; if (typeof v === 'string') e.textContent = v; });
   document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('on', b.dataset.l === L));
 }
+const chip = c => `<span class="chip ${S[c.status]?.c||'unk'}">${esc(c.label ? tx(c.label) : (S[c.status]?.[L]||'?'))}</span>`;
+const strip = st => !st ? '' : `<div class="stats">${(st.items||[]).map(i => `<div class="stat"><small>${esc(tx(i))}</small><b>${esc(tx(i.v))}</b></div>`).join('')}${st.bars?.length ? `<div class="bars" role="img" aria-label="${esc(tx(st.barsLabel))}" title="${esc(tx(st.barsLabel))}">${(() => { const m = Math.max(...st.bars, 0.0001); return st.bars.map(b => `<i style="height:${Math.max(3, b / m * 32)}px"></i>`).join(''); })()}</div>` : ''}${st.note ? `<div class="small" style="width:100%">${esc(tx(st.note))}</div>` : ''}</div>`;
+const actBtn = (a, text, cls = '') => { ACTIONS.set(a.key, a); return `<button class="btn ${cls}" data-act="${esc(a.key)}">${esc(text)}</button>`; };
 
-function render(){
-  static();
-  if (!DATA) return;
-  const all = DATA.services.flatMap(s => s.checks);
-  const cnt = k => all.filter(c => c.status === k).length;
-  const bad = cnt('bad');
-  const stats = st => !st ? '' : `<div class="stats">${(st.items||[]).map(i => `<div class="stat"><small>${esc(tx(i))}</small><b>${esc(tx(i.v))}</b></div>`).join('')}${st.bars?.length ? `<div class="bars">${(() => { const m = Math.max(...st.bars, 0.0001); return st.bars.map(b => `<i style="height:${Math.max(3, b / m * 32)}px"></i>`).join(''); })()}</div>` : ''}${st.note ? `<div class="small" style="width:100%">${esc(tx(st.note))}</div>` : ''}</div>`;
-  const row = c => `<div class="row" data-id="${esc(c.id)}">
-    <div class="row-top"><div class="t">${esc(tx(c.title))}</div><span class="chip ${S[c.status]?.c||'unk'}">● ${esc(S[c.status]?.[L]||'?')}</span></div>
+function emergency(e){
+  if (!e) return '';
+  const live = e.state.attack.length || e.state.paused.length;
+  const msg = live ? [e.state.paused.length ? `${T[L].emPaused(e.state.paused.length)}: ${e.state.paused.slice(0,6).join(', ')}` : '', e.state.attack.length ? `${T[L].emAttack(e.state.attack.length)}: ${e.state.attack.slice(0,6).join(', ')}` : ''].filter(Boolean).join(' · ') : T[L].emIdle;
+  return `<div class="emer ${live ? 'live' : ''}"><div><b>${T[L].emT}</b><span>${esc(msg)}</span></div><div class="acts">${e.actions.map(a => actBtn(a, tx(a.label), a.primary ? '' : a.danger ? 'danger' : 'ghost')).join('')}</div></div>`;
+}
+
+function row(c){
+  return `<div class="row" data-id="${esc(c.id)}">
+    <div class="row-top"><div class="t">${esc(tx(c.title))}</div>${chip(c)}</div>
     <div class="d">${esc(tx(c.detail))}</div>
+    ${c.worst ? `<div class="worst">${esc(tx(c.worst))}</div>` : ''}
     ${c.advice ? `<div class="advice">${esc(tx(c.advice))}</div>` : ''}
-    ${c.what ? `<details><summary>${T[L].more}</summary><p><b>${T[L].whatL}</b>${esc(tx(c.what))}</p><p><b>${T[L].whyL}</b>${esc(tx(c.why))}</p></details>` : ''}
-    ${(c.fix || c.link || c.manual) ? `<div class="acts">
-      ${c.fix ? `<button class="btn" data-fix="${esc(c.fix.key)}">${T[L][c.fix.label] || T[L].fix}</button>` : ''}
+    ${c.what ? `<details><summary>${T[L].more}</summary><p><b>${T[L].whatL}</b>${esc(tx(c.what))}</p><p><b>${T[L].whyL}</b>${esc(tx(c.why))}</p>${c.limits ? `<b>${T[L].limitsL}</b><ul>${(c.limits[L]||[]).map(x => `<li>${esc(x)}</li>`).join('')}</ul>` : ''}</details>` : ''}
+    ${(c.fix || c.drill || c.link || c.manual) ? `<div class="acts">
+      ${c.fix ? actBtn(c.fix, T[L][c.fix.label] || T[L].fix) : ''}
+      ${c.drill ? actBtn(c.drill, T[L].drill, c.fix ? 'ghost' : '') : ''}
       ${c.link ? `<a class="btn ghost" href="${esc(c.link)}" target="_blank" rel="noopener noreferrer">${T[L].open}</a>` : ''}
       ${c.manual ? `<button class="btn ghost" data-ans="yes" data-q="${esc(c.id)}">${T[L].yes}</button><button class="btn ghost" data-ans="no" data-q="${esc(c.id)}">${T[L].no}</button>` : ''}
     </div>` : ''}
   </div>`;
-  document.getElementById('app').innerHTML = `
-    <section class="card hero"><h1>${esc(bad ? T[L].heroBad(bad) : T[L].heroOk)}</h1><p>${esc(bad ? T[L].heroP : T[L].heroPok)}</p>
-      <div class="tally">${['bad','warn','unk','ok'].filter(k => cnt(k)).map(k => `<span class="chip ${S[k].c}">● ${cnt(k)} ${esc(S[k][L].toLowerCase())}</span>`).join('')}</div></section>
+}
+
+function watchCard(){
+  const w = DATA.watch;
+  const last = w?.at ? T[L].wLast(new Date(w.at).toLocaleString(L === 'tr' ? 'tr-TR' : 'en-GB')) : T[L].wNever;
+  const loop = `${RUN} watch --loop 5 --brake attack --lang ${L}`;
+  const yml = (DATA.watchTemplate || '').replace('--lang tr', `--lang ${L}`);
+  return `<section class="card watch"><h3>${T[L].wT}</h3><p>${T[L].wP}</p><p class="small">${esc(last)}</p>
+    <h4>${T[L].wA}</h4><p>${T[L].wAp}</p><div class="copy"><pre>${esc(loop)}</pre><button class="btn ghost" data-copy="${esc(loop)}">${T[L].copy}</button></div>
+    <h4>${T[L].wB}</h4><ol><li>${T[L].wB1}</li><li>${T[L].wB2} <a href="https://vercel.com/account/tokens" target="_blank" rel="noopener noreferrer">${T[L].wTok}</a></li><li>${T[L].wB3}</li></ol>
+    <details><summary>vibeamigo-watch.yml</summary><div class="copy" style="margin-bottom:10px"><pre>${esc(yml)}</pre><button class="btn ghost" data-copy="${esc(yml)}">${T[L].copy}</button></div></details>
+    <p class="small" style="margin-top:12px">${T[L].wLim}</p></section>`;
+}
+
+function render(){
+  fixed();
+  if (!DATA) return;
+  ACTIONS.clear();
+  const all = DATA.services.flatMap(s => s.checks);
+  const cnt = (...k) => all.filter(c => k.includes(c.status)).length;
+  const bad = cnt('bad'), tested = cnt('tested');
+  const live = DATA.services.some(s => s.emergency && (s.emergency.state.attack.length || s.emergency.state.paused.length));
+  const [h, p] = live ? [T[L].heroLive, T[L].heroLiveP] : bad ? [T[L].heroBad(bad), T[L].heroP] : !tested && cnt('ready') ? [T[L].heroUntested, T[L].heroUntestedP] : [T[L].heroOk(tested), T[L].heroOkP];
+  const tally = [['bad',cnt('bad')],['warn',cnt('warn')],['unk',cnt('unk')],['ready',cnt('ready')],['on',cnt('on','clean','self')],['tested',tested]].filter(([,n]) => n);
+  $('app').innerHTML = `
+    <section class="card hero"><h1>${esc(h)}</h1><p>${esc(p)}</p>
+      <div class="tally">${tally.map(([k,n]) => `<span class="chip ${S[k].c}">${n} ${esc(S[k][L].replace('✓ ','').toLowerCase())}</span>`).join('')}</div></section>
     <section class="card how"><div><b>${T[L].howT}</b> ${T[L].howP}</div>
-      <div class="legend">${['ok','bad','warn','unk'].map(k => `<div><span class="chip ${S[k].c}">● ${S[k][L]}</span><span>${S[k]['l'+L]}</span></div>`).join('')}</div></section>
-    ${DATA.services.map(s => `<section class="svc"><div class="svc-h"><b>${esc(tx(s.name))}</b><p>${esc(tx(s.sub))}</p></div>${stats(s.stats)}${s.checks.map(row).join('')}</section>`).join('')}`;
+      <div class="legend">${['tested','on','ready','bad','warn','unk'].map(k => `<div><span class="chip ${S[k].c}">${S[k][L]}</span><span>${S[k]['l'+L]}</span></div>`).join('')}</div></section>
+    ${DATA.services.map(s => `<section class="svc"><div class="svc-h"><b>${esc(tx(s.name))}</b><p>${esc(tx(s.sub))}</p></div>${strip(s.stats)}${strip(s.traffic)}${emergency(s.emergency)}${s.checks.map(row).join('')}</section>`).join('')}
+    ${watchCard()}`;
 }
 
 async function scan(){
   DATA = null;
-  document.getElementById('app').innerHTML = `<div class="loading"><div class="spin"></div>${esc(T[L].loading)}</div>`;
+  $('app').innerHTML = `<div class="loading"><div class="spin"></div>${esc(T[L].loading)}</div>`;
   try {
     const d = await api('/api/scan');
     if (d.error) throw new Error(d.error);
     DATA = d; render();
-  } catch (e) { document.getElementById('app').innerHTML = `<div class="card">${esc(T[L].err)} ${esc(e.message)}</div>`; }
+  } catch (e) { $('app').innerHTML = `<div class="card">${esc(T[L].err)} ${esc(e.message)}</div>`; }
 }
 
 let pending = null;
+function openAction(a, btn){
+  pending = { a, btn };
+  const drill = a.kind === 'drill';
+  $('dT').textContent = drill ? T[L].dDrill : a.kind === 'panic' ? tx(a.label) : T[L].dFix;
+  $('dL').innerHTML = (a.plan?.[L] || []).map(x => `<li>${esc(x)}</li>`).join('');
+  $('dNote').textContent = a.kind === 'fix' ? T[L].undo : '';
+  $('dYes').textContent = drill ? T[L].start : T[L].apply;
+  $('dPick').innerHTML = drill
+    ? `<div class="picker"><div class="picker-h">${T[L].pickOne}</div><select id="pOne">${a.projects.map(p => `<option value="${esc(p.id)}" ${p.id === a.defaultProject ? 'selected' : ''}>${esc(p.name)}</option>`).join('')}</select></div>`
+    : a.selectable && a.projects?.length
+      ? `<div class="picker"><div class="picker-h"><span>${T[L].pickMany} (${a.projects.length})</span><span><button type="button" data-all="1">${T[L].all}</button><button type="button" data-all="0">${T[L].none}</button></span></div><div class="picker-list">${a.projects.map(p => `<label><input type="checkbox" value="${esc(p.id)}" checked> ${esc(p.name)}</label>`).join('')}</div></div>`
+      : '';
+  $('dlg').showModal();
+}
+
 document.addEventListener('click', async e => {
-  const f = e.target.closest('[data-fix]');
-  if (f) {
-    const c = DATA.services.flatMap(s => s.checks).find(x => x.fix?.key === f.dataset.fix);
-    pending = { key: f.dataset.fix, btn: f };
-    document.getElementById('dL').innerHTML = (c.fix.plan?.[L] || []).map(x => `<li>${esc(x)}</li>`).join('');
-    document.getElementById('dlg').showModal();
-    return;
-  }
+  const act = e.target.closest('[data-act]');
+  if (act) return openAction(ACTIONS.get(act.dataset.act), act);
+  const all = e.target.closest('[data-all]');
+  if (all) return document.querySelectorAll('#dPick input[type=checkbox]').forEach(i => i.checked = all.dataset.all === '1');
+  const cp = e.target.closest('[data-copy]');
+  if (cp) return copyText(cp.dataset.copy);
   const a = e.target.closest('[data-ans]');
   if (a) { await api('/api/answer', { id: a.dataset.q, value: a.dataset.ans }); scan(); }
 });
-document.getElementById('dNo').onclick = () => { pending = null; document.getElementById('dlg').close(); };
-document.getElementById('dYes').onclick = async () => {
-  document.getElementById('dlg').close();
+$('dNo').onclick = () => { pending = null; $('dlg').close(); };
+$('rOk').onclick = () => { $('res').close(); scan(); };
+$('dYes').onclick = async () => {
   if (!pending) return;
-  const { key, btn } = pending; pending = null;
+  const { a, btn } = pending;
+  const drill = a.kind === 'drill';
+  const ids = drill ? [$('pOne').value] : a.selectable ? [...document.querySelectorAll('#dPick input:checked')].map(i => i.value) : [];
+  if ((drill || a.selectable) && !ids.length) return toast(T[L].pickErr);
+  $('dlg').close(); pending = null;
+  const old = btn.textContent;
   btn.disabled = true; btn.textContent = T[L].working;
-  const r = await api('/api/fix', { key });
-  if (r.ok) { toast(T[L].done); scan(); }
-  else { toast(`${T[L].failed} ${(r.log || [r.error]).join(' · ')}`, 8000); btn.disabled = false; btn.textContent = T[L].fix; }
+  if (drill) toast(T[L].drilling, 90000);
+  let r;
+  try { r = await api('/api/act', { key: a.key, projectIds: ids }); } catch (err) { r = { ok: false, error: err.message }; }
+  $('toast').style.display = 'none';
+  if (drill && r.result) {
+    const d = r.result;
+    $('rT').textContent = d.ok ? T[L].rOk : d.inconclusive ? T[L].rUnk : T[L].rBad;
+    $('rP').textContent = d.ok ? (d.passed !== undefined ? T[L].rPassed(d.project, d.passed, d.blockStatus) : T[L].rTimed(d.project, d.onSec, d.offSec)) : tx(d.note);
+    $('res').showModal();
+  } else if (r.ok) { toast(T[L].done); scan(); }
+  else { toast(`${T[L].failed} ${(r.log || [r.error]).join(' · ')}`, 9000); btn.disabled = false; btn.textContent = old; }
 };
-document.getElementById('rescan').onclick = scan;
-document.getElementById('share').onclick = () => {
+$('rescan').onclick = scan;
+$('share').onclick = () => {
   if (!DATA) return;
   const all = DATA.services.flatMap(s => s.checks);
-  const n = k => all.filter(c => c.status === k).length;
-  const text = L === 'tr'
-    ? `VibeAmigo ile hesaplarımı taradım: ${n('ok')} güvende, ${n('bad')} risk, ${n('warn')} eksik, ${n('unk')} elle kontrol. Sen de dene: npx github:sedattkahraman/vibeamigo`
-    : `I scanned my accounts with VibeAmigo: ${n('ok')} safe, ${n('bad')} at risk, ${n('warn')} partial, ${n('unk')} to check. Try it: npx github:sedattkahraman/vibeamigo`;
-  navigator.clipboard.writeText(text).then(() => toast(T[L].copied));
+  const n = (...k) => all.filter(c => k.includes(c.status)).length;
+  copyText(L === 'tr'
+    ? `VibeAmigo ile hesaplarımı taradım: ${n('tested')} fren gerçekten denendi, ${n('on','clean','self')} ayar açık, ${n('bad')} risk, ${n('warn')} eksik. Sen de dene: ${RUN}`
+    : `I scanned my accounts with VibeAmigo: ${n('tested')} brakes really tested, ${n('on','clean','self')} settings on, ${n('bad')} at risk, ${n('warn')} partial. Try it: ${RUN}`);
 };
 document.querySelectorAll('.lang button').forEach(b => b.onclick = () => { L = b.dataset.l; try { localStorage.setItem('va-lang', L) } catch {} render(); });
-static();
+fixed();
 scan();
 </script>
 </body>

@@ -1,25 +1,8 @@
 // API'den okunamayan ayarlar: kullanıcıya linkini verip soruyoruz. Cevap sadece bu bilgisayarda,
 // ~/.vibeamigo/answers.json içinde saklanır. Cevap verilmemiş ayar asla "güvende" gösterilmez.
-import { readFile, writeFile, mkdir } from "node:fs/promises";
-import { homedir } from "node:os";
-import path from "node:path";
+import { loadAnswers } from "../store.js";
 
-const FILE = path.join(homedir(), ".vibeamigo", "answers.json");
-
-async function loadAnswers() {
-  try {
-    return JSON.parse(await readFile(FILE, "utf8"));
-  } catch {
-    return {};
-  }
-}
-
-export async function saveAnswer(id, value) {
-  const all = await loadAnswers();
-  all[id] = { value, at: new Date().toISOString() };
-  await mkdir(path.dirname(FILE), { recursive: true });
-  await writeFile(FILE, JSON.stringify(all, null, 2), { mode: 0o600 });
-}
+export { saveAnswer } from "../store.js";
 
 const Q = {
   openai: {
@@ -90,7 +73,7 @@ export async function manualCards(detected) {
     .filter(([k]) => detected[k])
     .map(([, q]) => {
       const a = answers[q.id];
-      const status = !a ? "unk" : a.value === "yes" ? "ok" : "bad";
+      const status = !a ? "unk" : a.value === "yes" ? "self" : "bad";
       const when = a ? new Date(a.at).toLocaleDateString("tr-TR") : "";
       return {
         id: q.id,
@@ -104,7 +87,7 @@ export async function manualCards(detected) {
             detail: !a
               ? q.ask
               : a.value === "yes"
-                ? { tr: `Sen kontrol ettin, açık (${when}).`, en: `You checked: it's on (${when}).` }
+                ? { tr: `Sen kontrol ettin, açık (${when}). Biz göremiyoruz; ayar değişirse haberimiz olmaz.`, en: `You checked: it's on (${when}). We can't see it; we won't know if it changes.` }
                 : { tr: `Sen kontrol ettin, kapalı (${when}). Açmanı öneririz.`, en: `You checked: it's off (${when}). We suggest turning it on.` },
             what: q.what,
             why: q.why,
