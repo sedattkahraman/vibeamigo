@@ -5,8 +5,10 @@
 **Yapay zekâyla yaptığın siteler için fatura ve güvenlik kontrolü.** Açmayı unuttuğun şalterleri ve yanlışlıkla sızdırdığın anahtarları bulur. Kendi bilgisayarında çalışır, hiçbir yere bir şey göndermez.
 
 ```bash
-npx vibeamigo
+npx github:sedattkahraman/vibeamigo
 ```
+
+(npm'e yayınlanınca kısaca `npx vibeamigo` / once on npm: `npx vibeamigo`)
 
 [Türkçe](#türkçe) · [English](#english)
 
@@ -40,7 +42,7 @@ Doğrulanamayan bir ayar asla "güvende" gösterilmez.
 
 ### Nasıl çalışır?
 
-1. Projenin klasöründe `npx vibeamigo` yaz. Tarayıcında bir panel açılır.
+1. Projenin klasöründe `npx github:sedattkahraman/vibeamigo` yaz. Tarayıcında bir panel açılır.
 2. Vercel için yeni bir şifre istemez: bilgisayarındaki `vercel login` oturumunu kullanır.
 3. Her düzeltmeden önce ne yapacağını açıkça yazar ve onayını ister. Sen onaylamadan hiçbir şey değişmez.
 
@@ -85,7 +87,7 @@ A setting we can't verify is never shown as safe.
 
 ### How it works
 
-1. Run `npx vibeamigo` in your project folder. A panel opens in your browser.
+1. Run `npx github:sedattkahraman/vibeamigo` in your project folder. A panel opens in your browser.
 2. No new keys for Vercel: it uses your existing `vercel login` session.
 3. Every fix shows exactly what it will do and waits for your approval.
 
